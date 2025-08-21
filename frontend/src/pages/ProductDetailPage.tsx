@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
+import { useAuth } from '../contexts/AuthContext'; // Importar useAuth
 
 interface Review {
   id: number;
@@ -45,8 +46,9 @@ interface ProductDetail {
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { dispatch } = useCart();
+  const { dispatch: cartDispatch } = useCart();
   const { dispatch: dispatchFavorites, isFavorite } = useFavorites();
+  const { state: authState } = useAuth(); // Usar el estado de autenticación
   
   const [product, setProduct] = useState<ProductDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -73,10 +75,9 @@ const ProductDetailPage: React.FC = () => {
         const data = await response.json();
         setProduct(data);
         
-        // Configurar montos de reserva
-        const minAmount = Math.max(data.reservationPrice * 0.5, 100000); // Mínimo 50% del precio de reserva o 100k
+        const minAmount = Math.max(data.reservationPrice * 0.5, 100000);
         setMinReservation(minAmount);
-        setReservationAmount(data.reservationPrice); // Valor por defecto
+        setReservationAmount(data.reservationPrice);
         
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Error al cargar el producto');
@@ -90,20 +91,17 @@ const ProductDetailPage: React.FC = () => {
     }
   }, [id]);
 
+  // Botón "Añadir al Carrito" - usa el precio de reserva por defecto
   const handleAddToCart = () => {
     if (product) {
-      // Agregar al carrito con el monto de reserva personalizado
-      dispatch({ 
+      cartDispatch({
         type: 'ADD_TO_CART', 
         payload: {
-          ...product,
-          reservationAmount: reservationAmount,
-          reservationDate: new Date().toISOString(),
-          status: 'in_cart'
-        } as any
+          product: product,
+          reservationAmount: product.reservationPrice // Usa el precio de reserva por defecto
+        }
       });
       
-      // Efecto visual
       const button = document.getElementById('add-to-cart-btn');
       if (button) {
         button.classList.add('animate-pulse');
@@ -112,95 +110,28 @@ const ProductDetailPage: React.FC = () => {
     }
   };
 
-  const handleReservationConfirm = async () => {
-    if (product) {
-      try {
-        // Intentar hacer la reserva en el backend
-        const response = await fetch(`http://localhost:5000/api/products/${product.id}/reserve`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            clientName: 'Cliente App',
-            clientPhone: '300-000-0000',
-            clientEmail: 'cliente@email.com',
-            reservationAmount: reservationAmount
-          })
-        });
-
-        if (response.ok) {
-          // Agregar al carrito con reserva confirmada
-          dispatch({ 
-            type: 'ADD_TO_CART', 
-            payload: {
-              ...product,
-              reservationAmount: reservationAmount,
-              reservationDate: new Date().toISOString(),
-              status: 'reserved'
-            } as any
-          });
-          
-          // Actualizar estado local
-          setProduct(prev => prev ? {...prev, availability: 'Reservada'} : null);
-          setShowReservationModal(false);
-          
-          // Navegar al carrito
-          navigate('/cart');
-        }
-      } catch (err) {
-        console.error('Error al reservar:', err);
-        // Fallback: agregar al carrito sin actualizar backend
-        handleAddToCart();
-        navigate('/cart');
-      }
+  // Botón "Separar Ahora" - abre el modal
+  const handleReserveVehicle = () => {
+    if (product && product.availability === 'Disponible') {
+      setShowReservationModal(true);
     }
   };
 
-  const handleReserveVehicle = async () => {
-    if (product && product.availability === 'Disponible') {
-      try {
-        // Intentar hacer la reserva en el backend
-        const response = await fetch(`http://localhost:5000/api/products/${product.id}/reserve`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            clientName: 'Cliente App', // En una app real vendría del usuario logueado
-            clientPhone: '300-000-0000',
-            clientEmail: 'cliente@email.com'
-          })
-        });
+  // Confirmación desde el modal de reserva
+  const handleReservationConfirm = () => {
+    if (product) {
+      // TODO: Aquí iría la lógica de API si se necesitara confirmar la reserva en el backend
 
-        if (response.ok) {
-          // Agregar al carrito local (cast to any to avoid type issues)
-          dispatch({ 
-            type: 'ADD_TO_CART', 
-            payload: {
-              ...product,
-              reservationDate: new Date().toISOString(),
-              status: 'reserved'
-            } as any
-          });
-          
-          // Actualizar estado local
-          setProduct(prev => prev ? {...prev, availability: 'Reservada'} : null);
-          
-          // Efecto visual
-          const button = document.getElementById('reserve-btn');
-          if (button) {
-            button.classList.add('animate-pulse');
-            setTimeout(() => button.classList.remove('animate-pulse'), 600);
-          }
+      cartDispatch({
+        type: 'ADD_TO_CART',
+        payload: {
+          product: product,
+          reservationAmount: reservationAmount // Usa el monto seleccionado en el modal
         }
-      } catch (err) {
-        console.error('Error al reservar:', err);
-        // Fallback: agregar al carrito sin actualizar backend
-        dispatch({ type: 'ADD_TO_CART', payload: product as any });
-      }
-    } else {
-      setShowReservationModal(true);
+      });
+
+      setShowReservationModal(false);
+      navigate('/cart'); // Lleva al usuario al carrito para que vea lo que agregó
     }
   };
 
@@ -211,49 +142,18 @@ const ProductDetailPage: React.FC = () => {
   };
 
   const handleSubmitReview = async () => {
-    if (product && newReview.comment.trim()) {
+    if (product && newReview.comment.trim() && authState.isAuthenticated) {
       setSubmittingReview(true);
       
+      // TODO: Reemplazar con llamada a la API real
       try {
-        const response = await fetch(`http://localhost:5000/api/products/${product.id}/reviews`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            user: 'Usuario App', // En una app real vendría del usuario logueado
-            rating: newReview.rating,
-            comment: newReview.comment
-          })
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          
-          // Actualizar el producto con la nueva reseña y rating
-          setProduct(prev => {
-            if (!prev) return null;
-            return {
-              ...prev,
-              reviews: [result.review, ...prev.reviews],
-              averageRating: result.newAverageRating
-            };
-          });
-          
-          setNewReview({ rating: 5, comment: '' });
-          setShowReviewModal(false);
-        }
-      } catch (err) {
-        console.error('Error al enviar reseña:', err);
-        
-        // Fallback: agregar reseña solo localmente
         const localReview: Review = {
           id: Date.now(),
-          user: "Usuario App",
+          user: authState.user?.name || "Usuario Anónimo", // Usar nombre del usuario autenticado
           rating: newReview.rating,
           comment: newReview.comment,
           date: new Date().toISOString().split('T')[0],
-          verified: false
+          verified: true // Suponemos que el usuario logueado está verificado
         };
         
         setProduct(prev => {
@@ -270,9 +170,14 @@ const ProductDetailPage: React.FC = () => {
         
         setNewReview({ rating: 5, comment: '' });
         setShowReviewModal(false);
+      } catch (err) {
+        console.error('Error al enviar reseña:', err);
       } finally {
         setSubmittingReview(false);
       }
+    } else if (!authState.isAuthenticated) {
+      alert("Debes iniciar sesión para dejar una reseña.");
+      navigate('/login');
     }
   };
 
