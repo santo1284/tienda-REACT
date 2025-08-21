@@ -1,23 +1,23 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { Product } from '../hooks/useProducts';
 
-// Extendemos Product para incluir cantidad
+// Extendemos Product para incluir el monto de reserva. Ya no hay 'quantity'.
 interface CartItem extends Product {
-  quantity: number;  // Cuántos productos del mismo tipo
+  reservationAmount: number; // Con cuánto se separa la moto
 }
 
 // Estado del carrito
 interface CartState {
-  items: CartItem[];  // Productos en el carrito
-  total: number;      // Precio total
-  itemCount: number;  // Cantidad total de productos
+  items: CartItem[];      // Productos en el carrito
+  total: number;          // Suma de los montos de reserva
+  itemCount: number;      // Cantidad de motos en el carrito (siempre será items.length)
 }
 
-// Acciones que puede hacer el carrito
+// Acciones que puede hacer el carrito.
+// Se elimina UPDATE_QUANTITY y se modifica el payload de ADD_TO_CART.
 type CartAction =
-  | { type: 'ADD_TO_CART'; payload: Product }           // Agregar producto
+  | { type: 'ADD_TO_CART'; payload: { product: Product; reservationAmount: number } } // Agregar producto con monto
   | { type: 'REMOVE_FROM_CART'; payload: number }       // Eliminar por ID
-  | { type: 'UPDATE_QUANTITY'; payload: { id: number; quantity: number } }  // Cambiar cantidad
   | { type: 'CLEAR_CART' };                             // Vaciar carrito
 
 // Crear el contexto
@@ -31,27 +31,28 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case 'ADD_TO_CART': {
       // Buscar si el producto ya existe en el carrito
-      const existingItem = state.items.find(item => item.id === action.payload.id);
-      let newItems: CartItem[];
+      const existingItem = state.items.find(item => item.id === action.payload.product.id);
       
+      // Si el item ya existe, no hacemos nada para evitar duplicados.
       if (existingItem) {
-        // Si existe, aumentar cantidad
-        newItems = state.items.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        // Si no existe, agregar nuevo con cantidad 1
-        newItems = [...state.items, { ...action.payload, quantity: 1 }];
+        alert('Esta moto ya está en tu carrito.');
+        return state;
       }
       
-      // Recalcular total y contador
+      // Si no existe, agregar el nuevo item con su monto de reserva
+      const newItem: CartItem = {
+        ...action.payload.product,
+        reservationAmount: action.payload.reservationAmount,
+      };
+
+      const newItems = [...state.items, newItem];
+
+      // Recalcular total (basado en reservationAmount) y contador
       return {
         ...state,
         items: newItems,
-        total: newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        itemCount: newItems.reduce((sum, item) => sum + item.quantity, 0)
+        total: newItems.reduce((sum, item) => sum + item.reservationAmount, 0),
+        itemCount: newItems.length
       };
     }
     
@@ -61,24 +62,8 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       return {
         ...state,
         items: newItems,
-        total: newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        itemCount: newItems.reduce((sum, item) => sum + item.quantity, 0)
-      };
-    }
-    
-    case 'UPDATE_QUANTITY': {
-      // Actualizar cantidad específica
-      const newItems = state.items.map(item =>
-        item.id === action.payload.id
-          ? { ...item, quantity: Math.max(0, action.payload.quantity) }
-          : item
-      ).filter(item => item.quantity > 0);  // Eliminar si cantidad es 0
-      
-      return {
-        ...state,
-        items: newItems,
-        total: newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        itemCount: newItems.reduce((sum, item) => sum + item.quantity, 0)
+        total: newItems.reduce((sum, item) => sum + item.reservationAmount, 0),
+        itemCount: newItems.length
       };
     }
     
