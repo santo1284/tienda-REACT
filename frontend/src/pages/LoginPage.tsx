@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import api from '../utils/api';
 
 const LoginPage: React.FC = () => {
   const { dispatch } = useAuth();
@@ -8,26 +9,29 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
-    // TODO: Reemplazar con una llamada real a la API de login
-    if (email === 'user@example.com' && password === 'password') {
-      const mockUser = {
-        id: '1',
-        name: 'Juan Pérez',
-        email: 'user@example.com',
-      };
-      const mockToken = 'fake-jwt-token';
+    try {
+      const response = await api.post('/auth/login', { email, password });
+      const { token, user } = response.data;
 
-      dispatch({ type: 'LOGIN_SUCCESS', payload: { user: mockUser, token: mockToken } });
+      dispatch({ type: 'LOGIN_SUCCESS', payload: { user, token } });
 
-      // Redirigir al usuario a la página de inicio o a la página anterior
-      navigate('/');
-    } else {
-      setError('Correo o contraseña incorrectos. Inténtalo de nuevo.');
+      // Redirigir según el rol del usuario
+      if (user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.msg || 'Error al iniciar sesión. Verifica tus credenciales.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,9 +114,10 @@ const LoginPage: React.FC = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-lime-600 hover:bg-lime-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500"
+              disabled={loading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-lime-600 hover:bg-lime-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500 disabled:bg-lime-400"
             >
-              Iniciar Sesión
+              {loading ? 'Iniciando...' : 'Iniciar Sesión'}
             </button>
           </div>
         </form>
