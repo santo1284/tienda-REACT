@@ -196,9 +196,9 @@ const ContactPage: React.FC = () => {
                   <div>
                     <h4 className="font-bold text-gray-900 mb-1">Dirección</h4>
                     <p className="text-gray-600 leading-relaxed">
-                      Calle Principal #123<br />
-                      Centro, Ciudad<br />
-                      Código Postal 12345
+                      Calle Principal de Garzón<br />
+                      Centro, Ciudad Garzón<br />
+                      Código Postal 2425
                     </p>
                   </div>
                 </div>
@@ -209,7 +209,7 @@ const ContactPage: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-gray-900 mb-1">Teléfono</h4>
-                    <p className="text-gray-600">+1 (555) 123-4567</p>
+                    <p className="text-gray-600">+57 (314) 298-8853</p>
                     <p className="text-sm text-gray-500">Lun - Vie: 9AM - 6PM</p>
                   </div>
                 </div>
@@ -220,7 +220,7 @@ const ContactPage: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-gray-900 mb-1">Email</h4>
-                    <p className="text-gray-600">info@mitienda.com</p>
+                    <p className="text-gray-600">mimotodelpueblo@gmail.com</p>
                     <p className="text-sm text-gray-500">Respuesta en 24h</p>
                   </div>
                 </div>
@@ -250,10 +250,10 @@ const ContactPage: React.FC = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { name: 'Facebook', icon: '📘', color: 'bg-blue-500 hover:bg-blue-600', href: '#' },
-                  { name: 'Twitter', icon: '🐦', color: 'bg-blue-400 hover:bg-blue-500', href: '#' },
-                  { name: 'Instagram', icon: '📷', color: 'bg-pink-500 hover:bg-pink-600', href: '#' },
-                  { name: 'LinkedIn', icon: '💼', color: 'bg-blue-600 hover:bg-blue-700', href: '#' }
+                  { name: 'Facebook', icon:<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAMVJREFUSEvtltENgzAMRC+b0E3KJnSSlknKJnQTOkp7FZGsKBA3ECIkW0J8AH7x2YfsUClcJS5OD77Oyr2D+6KgWyom7A7AQz2E8EuqhbngBsC0kLwomFDCY1EMHKv29ZWcl4++hNTs6SgSqyoMD5LT4w7AUyRipW2qQgNrpV6b4lDFAcAtJX0J8APAblP9T8XVwJxw6emo6lqp5cdmJ/uBpCz8e27DpZHJ7HSYnbj6yH2LG4hfazWtyp5qdfK1F3PsdG7wBxb4MR/TodsdAAAAAElFTkSuQmCC" className="w-6 h-6 filter invert sepia saturate-200 hue-rotate-270" />, color: 'bg-blue-500 hover:bg-blue-600', href: '#' },
+                  { name: 'Twitter', icon:<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAZxJREFUSEvFlotNxDAMQH2TAJvAJMAkwCTAJLAJsAl9VR05xnFzIadGQpza2s//+CQHndNBXBkBX4vIrYhcicjPZvj38uzzHCd6wcDuF8XPiXKFv/cYsQfuAXpb1IAXEeF3eDIw0A8R4f/IAXrXgrfAwL5GaE6mCW+B8ZQCmnFCeAR+XcLzMINodLwtHfBodXowXuJt62D9SM6RA1xazoMzbxFCOGorfYd8K0V8Q7Gtx4MpqMgjLL7ZZHyLWYVZJ1gdFXgvzDZPCkemeLGlKStKvl3DbT2moAhVdjzcDoieTiBV6DgbjMyfCu3wVJ1h5DLRKvDT8iCbxSpcFclWE3tzXGVDj/dyjLCHqsLemT4E9lByqv2JAT1wOmOtC1tc2XyuWsHl1BdcdrEUnu/jrDIVEH2TvdN0VEXpwbNupaglSw9Hk4tnh1wSWiT/WQC8t74+wllt22PGIoC+KsStS8JaO2P1qa5Cq/wSyx76y2hsDf49sA09IzXbTMglLcN629wue0IdGUv49Y/3utRfbKFP78qRl72hHtGdyvwCYTFhH+OVFr4AAAAASUVORK5CYII="  className="w-6 h-6 filter invert sepia saturate-200 hue-rotate-270"/>, color: 'bg-blue-400 hover:bg-blue-500', href: '#' },
+                  { name: 'Instagram', icon: <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAbpJREFUSEvNlz0vREEUhp/9JT4a/oFGQaIiQkGNXqEjFEgkEpVCT09DaDSIxl9Q8T8U7JvMkXHvfO3sxu4kmy3uzDznfe85Z+Z2GNLoDInLyIPHnTP2nzLqucTFlGJBNoA59yvZz+Z8AlfAcWxRDCzYUy+kyFwFsNUNvOVCDPzRjbjE1pLYBJ9oTgyBL4HNkh0TKgWTazZku5T/jhC4H7W+Or0qg7dUh8DfGbWWOC9eph+6V+MDfAFZcC6pjiKZahWg54JoNHNk3k+ypuIU2KDTwDow6wCvwDXwDki55oVGFVjloIVTwAWw0Nj5EdgGvgAlp59YNrUKbGoPgJOIon3gNKG6CqxSUEk8AIsR8B2w4tSGmk8V2BbdA0sR8C2w6nqA7G6OKrBZvefsDLF3gbNBW211OAmcA8sNstTuuFKKNaAqxeJY21PfXQNmHPwNuHHQ6nJS0Svi0MgddSmo9lPA1lxaN5AU2ILRYtW1tcwxl1C50+xPswr1ar+5Z9p28eNsr9ZOOcuKad7EomNRlkl1zrrSAIovAnayDALe89XH4P9+2WvaKNtLre/7elv6DqvmjfyXRJWq1KIf7+5nHw14piEAAAAASUVORK5CYII="  className="w-6 h-6 filter invert sepia saturate-200 hue-rotate-270"/>, color: 'bg-pink-500 hover:bg-pink-600', href: '#' },
+                  { name: 'LinkedIn', icon:<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAThJREFUSEvtljFuwkAQRZ8PkJImVdLmDCCRa0RCAqWAI9ARbpGOFJEoOQECQU+bMhyCA8BH62gZ1sJJxoJEjGRZsmf3eWb+7DjjTJadicvFgdtADZgCqyqykop4CdQjWAt494ZbcBd4NZAP4KFq8GAHeDGQDXBTNbgBLAxkDDxVDdb+PaAP3AIT4BlQ1K52ce300+juAF3rcBXuYyPWopnxfgOG4ZnEpx6P7THARuEev5sDndRHpMCfCbAWy1KqVxfYTjgJ9wCXKYs+LM/a3t8brNqqXNaUcpXky7zA2lSbF5VDz+/jWnuAj9IYBNo0YbuDJTwpPzYpPKX+PCsuNY7TnMNT6j/w80j1FVyk7GuqD9pAp853z+q/LS6Fb0+ceLbm89ZOH3s2n/T7N38gZUZkciyWXvhbxy1OnGof4BwBlAAAAABJRU5ErkJggg=="  className="w-6 h-6 filter invert sepia saturate-200 hue-rotate-270"/>, color: 'bg-blue-600 hover:bg-blue-700', href: '#' }
                 ].map(({ name, icon, color, href }) => (
                   <a 
                     key={name}

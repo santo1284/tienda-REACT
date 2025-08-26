@@ -16,7 +16,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     e.preventDefault(); // Evita que el Link se active
     e.stopPropagation();
     
-    dispatch({ type: 'ADD_TO_CART', payload: product });
+    dispatch({ type: 'ADD_TO_CART', payload: { product, reservationAmount: 1 } });
     
     // Efecto visual más sutil
     const button = document.getElementById(`add-btn-${product.id}`);
@@ -60,24 +60,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </span>
         </div>
         
-        {/* BOTÓN DE FAVORITO */}
-        <button
-          onClick={handleToggleFavorite}
-          className={`absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-lg 
-            opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110
-            ${isFavorite(product.id) ? 'bg-red-500 text-white' : 'bg-white/90 backdrop-blur-sm text-gray-600'}
-          `}
-        >
-          {isFavorite(product.id) ? (
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
-            </svg>
-          ) : (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-            </svg>
-          )}
-        </button>
+       
 
         {/* OVERLAY DE CLICK PARA VER DETALLES */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/40">
@@ -145,6 +128,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <span>Agregar al Carrito</span>
         </button>
       </div>
+      
+       {/* BOTÓN DE FAVORITO */}
+        <button
+          onClick={handleToggleFavorite}
+          className={`absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-lg 
+            opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110
+            ${isFavorite(product.id) ? 'bg-red-500 text-white' : 'bg-white/90 backdrop-blur-sm text-gray-600'}
+          `}
+        >
+          {isFavorite(product.id) ? (
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+          )}
+        </button>
       
       {/* EFECTO DE BRILLO AL HOVER */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">

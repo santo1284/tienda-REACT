@@ -17,12 +17,12 @@ const productos = [
     id: 1,
     name: "Honda CBR 600RR 2023",
     price: 15500000,
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500",
+    image: "https://i.blogs.es/f0a5d5/cbr600rr-1-2023/1366_2000.jpeg",
     additionalImages: [
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500",
-      "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=500",
-      "https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=500",
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500"
+      "https://i.blogs.es/f0a5d5/cbr600rr-1-2023/1366_2000.jpeg",
+      "https://i.blogs.es/f0a5d5/cbr600rr-1-2023/1366_2000.jpeg",
+      "https://i.blogs.es/f0a5d5/cbr600rr-1-2023/1366_2000.jpeg",
+      "https://i.blogs.es/f0a5d5/cbr600rr-1-2023/1366_2000.jpeg"
     ],
     category: "Deportivas",
     year: 2023,
@@ -86,12 +86,12 @@ const productos = [
     id: 2,
     name: "Yamaha MT-07 2022",
     price: 12800000,
-    image: "https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=500",
+    image: "https://bikes.motobank.co.uk/fp/27277/yamaha-mt-07-2022-icon-blue_471458.jpg",
     additionalImages: [
-      "https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=500",
-      "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=500",
-      "https://images.unsplash.com/photo-1567789884554-0b844b597180?w=500",
-      "https://images.unsplash.com/photo-1544966503-7e5ac882d73e?w=500"
+      "https://i.ytimg.com/vi/RR4YxaBFVE8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCnAUNG6OS8i683b9bYQldSqR6L9A",
+      "https://bikes.motobank.co.uk/fp/27277/yamaha-mt-07-2022-icon-blue_471458.jpg",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSi1wbo52mfVD-TBGQcsWadDrehriAzSdjUWw&s",
+      "https://bikes.motobank.co.uk/fp/27277/yamaha-mt-07-2022-icon-blue_471458.jpg"
     ],
     category: "Naked",
     year: 2022,
@@ -157,12 +157,12 @@ const productos = [
     id: 3,
     name: "Honda PCX 150 2023",
     price: 8900000,
-    image: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=500",
+    image: "https://http2.mlstatic.com/D_NQ_NP_863983-MCO84561192742_052025-O.webp",
     additionalImages: [
-      "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=500",
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500",
-      "https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=500",
-      "https://images.unsplash.com/photo-1567789884554-0b844b597180?w=500"
+      "https://http2.mlstatic.com/D_NQ_NP_863983-MCO84561192742_052025-O.webp",
+      "https://fulltimemotos.com.ar/wp-content/uploads/qual-e-o-valor-da-pcx-2023.webp",
+      "https://pueyrredonmotos.com/honda/wp-content/uploads/2023/12/Honda-PCX150-2020-5.jpeg",
+      "https://pueyrredonmotos.com/honda/wp-content/uploads/2023/12/Honda-PCX150-2020-5.jpeg"
     ],
     category: "Scooter",
     year: 2023,
@@ -228,12 +228,12 @@ const productos = [
     id: 4,
     name: "Kawasaki Ninja 400 2021",
     price: 13200000,
-    image: "https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=500",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV5pENR_Wk5UaCUpHaDYlu44KxNC6kUwHSPw&s",
     additionalImages: [
-      "https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=500",
-      "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=500",
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500",
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500"
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_BJljMO8OKUAjhtx4BgE7hiRcmuE9OikpwQ&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuiVqhmnOadN6EK31J-Hzs5PPraIG9XBvElg&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuiVqhmnOadN6EK31J-Hzs5PPraIG9XBvElg&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuiVqhmnOadN6EK31J-Hzs5PPraIG9XBvElg&s"
     ],
     category: "Deportivas",
     year: 2021,
@@ -299,12 +299,12 @@ const productos = [
     id: 5,
     name: "Suzuki DR 200SE 2023",
     price: 7500000,
-    image: "https://images.unsplash.com/photo-1544966503-7e5ac882d73e?w=500",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuKuMoVkjmqppa_Ohs0teC3KnM0RufNQp1sQ&s",
     additionalImages: [
-      "https://images.unsplash.com/photo-1544966503-7e5ac882d73e?w=500",
-      "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=500",
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500",
-      "https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=500"
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuKuMoVkjmqppa_Ohs0teC3KnM0RufNQp1sQ&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBo6DJyFV6SMdLvGZkiJh3_s0hYM3QHT9a6w&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIKCndIMER5aLIRTPPqqzUu-HTRckMmcptRQ&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZbiJ4_GBRzjZOJZ_MYm8n76zcfljw-publw&s"
     ],
     category: "Enduro",
     year: 2023,
@@ -361,12 +361,11 @@ const productos = [
     id: 6,
     name: "BMW G 310 GS 2022",
     price: 17900000,
-    image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=500",
+    image: "https://http2.mlstatic.com/D_NQ_NP_787718-MCO85349110712_062025-O.webp",
     additionalImages: [
-      "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=500",
-      "https://images.unsplash.com/photo-1544966503-7e5ac882d73e?w=500",
-      "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=500",
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500"
+      "https://http2.mlstatic.com/D_NQ_NP_787718-MCO85349110712_062025-O.webp",
+      "https://http2.mlstatic.com/D_NQ_NP_838888-MCO85570341948_062025-O.webp",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSMjQJlPGv82OECpkWQaAj4OeoPvTS8_Zoxw&s"
     ],
     category: "Adventure",
     year: 2022,
@@ -425,12 +424,10 @@ const productos = [
     id: 7,
     name: "TVS Apache RTR 200 4V",
     price: 9200000,
-    image: "https://images.unsplash.com/photo-1567789884554-0b844b597180?w=500",
+    image: "https://media.autecomobility.com/recursos/marcas/tvs/apache-rtr-200-4v/interna-de-producto/Imagen_Fondo_Texto_detalle_4.webp",
     additionalImages: [
-      "https://images.unsplash.com/photo-1567789884554-0b844b597180?w=500",
-      "https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=500",
-      "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=500",
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500"
+      "https://media.autecomobility.com/recursos/marcas/tvs/apache-rtr-200-4v/interna-de-producto/Imagen_Fondo_Texto_detalle_4.webp",
+      "https://cdn.bikedekho.com/processedimages/tvs/2025-apache-rtr-200-4v/source/2025-apache-rtr-200-4v6846e0c4ea756.jpg"
     ],
     category: "Street",
     year: 2023,
@@ -496,12 +493,9 @@ const productos = [
     id: 8,
     name: "Bajaj Dominar 400 2022",
     price: 11500000,
-    image: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=500",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyYeO_20E6WYqa7zKFLUrsGyHvyHFSeC6yxQ&s",
     additionalImages: [
-      "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=500",
-      "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=500",
-      "https://images.unsplash.com/photo-1544966503-7e5ac882d73e?w=500",
-      "https://images.unsplash.com/photo-1567789884554-0b844b597180?w=500"
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyYeO_20E6WYqa7zKFLUrsGyHvyHFSeC6yxQ&s"
     ],
     category: "Touring",
     year: 2022,
@@ -567,12 +561,11 @@ const productos = [
     id: 9,
     name: "AKT NKD 125 2023",
     price: 4200000,
-    image: "https://images.unsplash.com/photo-1555502184-6e4b6e0b9f2b?w=500",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp656KXvOZEhhj0aBSsxDthJiOpmONCIinAw&s",
     additionalImages: [
-      "https://images.unsplash.com/photo-1555502184-6e4b6e0b9f2b?w=500",
-      "https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=500",
-      "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=500",
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500"
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsIYM6ENKAASVp3FOBhdQJgTT4gG1BHaPXOw&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxao5jwkuDLcSmgG17NRKOA8KMBxHY_sKJ0w&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpTBNTNVM-athPJXf0PkqwVEdBVX4NQzFpw&s"
     ],
     category: "Urbana",
     year: 2023,

@@ -24,7 +24,7 @@ const TallerPage: React.FC = () => {
             </div>
             <div>
               <img
-                src="https://via.placeholder.com/500x300.png?text=Nuestro+Taller+Moderno"
+                src="https://tallergp.com/wp-content/uploads/2021/11/motos-taller-software.jpg"
                 alt="Taller de motos"
                 className="rounded-lg shadow-md"
               />

@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { useFavorites } from '../../contexts/FavoritesContext';
+import imagenLogo from '../../img/image.png'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  
   const { state: cartState } = useCart();
   const { state: authState, dispatch: authDispatch } = useAuth();
+  const { state: favoritesState } = useFavorites();
   const navigate = useNavigate();
   const location = useLocation(); // Hook para obtener la ruta actual
 
@@ -29,7 +31,7 @@ const Header = () => {
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
               <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                <span className="text-2xl font-bold text-white">🏍️</span>
+                <span className="text-2xl font-bold text-white"><img src={imagenLogo} alt="Logo" /></span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30 rounded-2xl transition-opacity duration-300 transform -skew-x-12"></div>
             </div>
@@ -93,7 +95,36 @@ const Header = () => {
                 </div>
               </div>
             </Link>
-            
+
+             {/* Me gusta */}
+            <Link to="/gusta" className="relative group">
+              <div className="flex items-center space-x-3 bg-pink-400 hover:bg-pink-500 text-white px-4 py-3 rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl">
+                <div className="relative">
+                  {/* Ícono de corazón */}
+                  <svg
+                    className="w-6 h-6"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 21C12 21 5 13.5 5 8.5C5 5.42 7.42 3 10.5 3C12.24 3 13.91 3.81 15 5.09C16.09 3.81 17.76 3 19.5 3C22.58 3 25 5.42 25 8.5C25 13.5 18 21 18 21H12Z" />
+                  </svg>
+                  {favoritesState.itemCount > 0 && (
+                    <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center animate-bounce">
+                      {favoritesState.itemCount}
+                    </div>
+                  )}
+                </div>
+                <div className="hidden sm:block">
+                  <span className="font-medium">Me gusta</span>
+                  <p className="text-xs text-gray-200 -mt-1">
+                    {favoritesState.itemCount > 0 
+                      ? `${favoritesState.itemCount} ${favoritesState.itemCount === 1 ? 'artículo' : 'artículos'}`
+                      : 'Sin favoritos'}
+                  </p>
+                </div>
+              </div>
+            </Link>
+
             {/* SECCIÓN DE USUARIO */}
             <div className="relative hidden lg:block">
               {authState.isAuthenticated ? (

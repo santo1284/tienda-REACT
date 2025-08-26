@@ -9,7 +9,7 @@ const HomePage = () => {
       id: 1,
       name: "Honda CBR 600RR 2023",
       price: 15500000,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500",
+      image: "https://i.blogs.es/f0a5d5/cbr600rr-1-2023/1366_2000.jpeg",
       category: "Deportivas",
       condition: "Nueva",
       cc: 600,
@@ -19,7 +19,7 @@ const HomePage = () => {
       id: 2,
       name: "Yamaha MT-07 2022",
       price: 12800000,
-      image: "https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=500",
+      image: "https://bikes.motobank.co.uk/fp/27277/yamaha-mt-07-2022-icon-blue_471458.jpg",
       category: "Naked",
       condition: "Seminueva",
       cc: 689,
@@ -29,7 +29,7 @@ const HomePage = () => {
       id: 3,
       name: "Honda PCX 150 2023",
       price: 8900000,
-      image: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=500",
+      image: "https://motos.honda.com.co/images/blogs/HondaPCX150.png",
       category: "Scooter",
       condition: "Seminueva",
       cc: 149,
@@ -169,7 +169,7 @@ const HomePage = () => {
                     {/* Imagen de moto */}
                     <div className="relative z-10 flex items-center justify-center h-48">
                       <img 
-                        src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop" 
+                        src="https://i.blogs.es/f0a5d5/cbr600rr-1-2023/1366_2000.jpeg" 
                         alt="Honda CBR Featured"
                         className="h-full w-auto object-contain rounded-xl"
                       />
@@ -438,7 +438,7 @@ const HomePage = () => {
           {/* BOTÓN VER MÁS */}
           <div className="text-center">
             <a 
-              href="/motos" 
+              href="/products" 
               className="inline-flex items-center space-x-2 bg-gray-900 text-white font-semibold py-4 px-8 rounded-2xl hover:bg-gray-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               <span>Ver Todas las Motos</span>
@@ -580,7 +580,7 @@ const HomePage = () => {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center mb-8">
               <a 
-                href="/motos" 
+                href="/products" 
                 className="group bg-orange-500 hover:bg-orange-600 text-white px-10 py-5 rounded-2xl font-bold hover:shadow-2xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-3 text-lg"
               >
                 <span>🏍️ Explorar Motos</span>

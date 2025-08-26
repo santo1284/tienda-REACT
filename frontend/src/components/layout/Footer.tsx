@@ -1,4 +1,6 @@
 import React from 'react';
+import log from '../../img/image.png';
+import 'boxicons'
 
 const Footer = () => {
   return (
@@ -12,7 +14,7 @@ const Footer = () => {
           <div className="md:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center shadow-lg">
-                <span className="text-2xl font-bold text-white">🏍️</span>
+                <span className="text-2xl font-bold text-white"><img src={log} alt="logo" /></span>
               </div>
               <div>
                 <h3 className="text-xl font-bold text-white">Mi Moto del Pueblo</h3>
@@ -36,14 +38,14 @@ const Footer = () => {
                 <div className="text-sm text-gray-400">Clientes satisfechos</div>
               </div>
             </div>
-            
             {/* REDES SOCIALES */}
+        
             <div className="flex space-x-4">
               {[
-                { name: 'Facebook', icon: '📘', color: 'hover:bg-blue-600', href: 'https://facebook.com/mimotodelpueblo' },
-                { name: 'Instagram', icon: '📷', color: 'hover:bg-pink-600', href: 'https://instagram.com/mimotodelpueblo' },
-                { name: 'WhatsApp', icon: '💬', color: 'hover:bg-green-600', href: 'https://wa.me/573001234567' },
-                { name: 'TikTok', icon: '🎵', color: 'hover:bg-black', href: 'https://tiktok.com/@mimotodelpueblo' }
+                { name: 'Facebook', icon:<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAMVJREFUSEvtltENgzAMRC+b0E3KJnSSlknKJnQTOkp7FZGsKBA3ECIkW0J8AH7x2YfsUClcJS5OD77Oyr2D+6KgWyom7A7AQz2E8EuqhbngBsC0kLwomFDCY1EMHKv29ZWcl4++hNTs6SgSqyoMD5LT4w7AUyRipW2qQgNrpV6b4lDFAcAtJX0J8APAblP9T8XVwJxw6emo6lqp5cdmJ/uBpCz8e27DpZHJ7HSYnbj6yH2LG4hfazWtyp5qdfK1F3PsdG7wBxb4MR/TodsdAAAAAElFTkSuQmCC"  className="w-6 h-6 filter invert sepia saturate-200 hue-rotate-270"/> , color: 'hover:bg-blue-600', href: 'https://facebook.com/mimotodelpueblo' },
+                { name: 'Instagram', icon:<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAb9JREFUSEvllktOA0EMRJ2TACcBDsL3IsBJ+FyEz5Yte+AkwEOuyHTcMx56ESFaijKZ2FV22e3ulW1prbbEa3+CeNfM+MythzkD/p/L+MLMDvxTwcPmzQ1vvvCvek49YsiuQ4YC0/dUEPhqYX8Ygln/0SN+dVJkI+qSfI6qchA4QUC+10aaEeNw6mREu3QdeQmfXDXIkf0sAmXEypYoK9JGPEjv/AVE+N9nWWfEH+7YKwNSngQZAb918GN/BuLcSUlkQ+4WHFAMqWkmM11+mWgPsLqYMoH7YmbPjgcueOteaYmpB9JkxJEU8ncPYN97gp+8b7cQeOD+ilhKAP4DwMkVMJlT27gLhoiV7UZ3Btm1G9qsh4gFSjaQZ6tXpiHi1Llhp6kIsFVliHhrUsfmyuSWzFnzDWUMoKTkGTkfXeqdsLez7aRJOLmdpgaIJlY2QHp7mPfpCO5NrvRECacP0jI4CIY9q5GZdXs6grN5XOng6oml8szOagDVwb15XSXFTkmUjkXkw0EyLr0IQIjv4ouAHEXO75GrTzu7vxWbuuzFczfeoypSx2MytZ+7ZcqperXFvnQ/qxJXslxk8/+IPwEhHY4f8DCRSgAAAABJRU5ErkJggg=="  className="w-6 h-6 filter invert sepia saturate-200 hue-rotate-270"/>, color: 'hover:bg-pink-600', href: 'https://instagram.com/mimotodelpueblo' },
+                { name: 'WhatsApp', icon:<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAcxJREFUSEvllutNBDEMhH2dQCdQCVAJUAlQyUEl0AncJ2UkX3acZPlzQkRarbTxejzjR3KIC63DhXDjTwJfRQTPV3t2ibeHMSB3EXHTngwE+HtEfJyCeV2JYBX48eTsKTkEiMWbQPogbmcqzIBheUySwgZWsMsLOwIgQMmP7XPFfgSMI0BZAMFitpQOqcPbgo+AAQW8/HkQhYImFQ9GobKdlNOeKQ57mSt8+QD8ujdyjLPE/KBC+mz5Q/IV8FwfsD6rdgd8HxEvTSIZ69uefGMrEpsaccCAApTZ6psUy3ujgoM1Sm3kdsCSNO/9ljFByd9ZsA7420SoyHG0t8rVHWe10QOX0jT5kbxskUJzlzrbTo6xfOYWyf1JERG0m9MudRbYStOQ82TKBwOsWHzrRyVElqparHAAK7f6QyPb5P9UlBtfrrhGec4A2BEAzrX6/JdDp5rVknszcQx9XQg0XGQiH1a5Ctj23uxoSvv5kNjMaexGszpHqjN2ho0dhabLQTnXR7MaYN0wcKSKfTO3i/4cnva6A1ZuMjsc4TwXkU6t/uqzNNlGI1N9KobVZU+3THrVqWHT40YmAKvnrVjPcr/Zn132djtc/eH/Af8ATz+KHx4A1f8AAAAASUVORK5CYII="  className="w-6 h-6 filter invert sepia saturate-200 hue-rotate-270"/>, color: 'hover:bg-green-600', href: 'https://wa.me/573001234567' },
+                { name: 'TikTok', icon:<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAVhJREFUSEvVlo1NAzEMRn2bwCSlm8AktJPAJoVJgE24J9WViWI7zV0UEamqepfk5fvqnywyaSyTuLIV/CQiB3P4HxF5bxGzFfy6Qk4G9C0ijzPAMI8i8pHB91YMD6tfZoBhYv85go9QrLwQPhLMAQg2/m++/zgwGqzqgRN0t/EvwA9rxPJhaLrU8hhlPH82ArsUl5uznzoVFRAOqZXts6xokdUs/HJSogUcprIHjqCtirvAl6tN3uIhigmKt4JIHlIKyUXc4Ddj1yYB1EYkEGpvrfDvCiagNG2yujsUjFqvudfc6e7H9ygu5za1RJsWNpbKiPZuFbWU2wSm2gC3g8DCco3m2hzmN90+PMUoAWwDTFsc3+VzPWCzWg+sm3vlslZUcAK16khYtSIw7zw7y02jPHcPkPVjbC1bnN0svVtlNTezRlucztMrTbauW3H3xtnCzOpsfff7X8AeVB8K2yaFAAAAAElFTkSuQmCC"  className="w-6 h-6 filter invert sepia saturate-200 hue-rotate-270"/>, color: 'hover:bg-purple-400', href: 'https://tiktok.com/@mimotodelpueblo' }
               ].map(({ name, icon, color, href }) => (
                 <a
                   key={name}
