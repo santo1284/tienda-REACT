@@ -18,6 +18,11 @@ import RegisterPage from './pages/RegisterPage';
 import ServiciosPage from './pages/ServiciosPage'; // Importar ServiciosPage
 import TallerPage from './pages/TallerPage'; // Importar TallerPage
 import AlquilerPage from './pages/AlquilerPage'; // Importar AlquilerPage
+import VenderPage from './pages/VenderPage';
+import PrivateRoute from './components/routing/PrivateRoute';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminRoute from './components/routing/AdminRoute';
+import UserInboxPage from './pages/UserInboxPage';
 
 function App() {
   return (
@@ -37,6 +42,15 @@ function App() {
                 <Route path="/product/:id" element={<Detail />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+
+                {/* Rutas Protegidas */}
+                <Route element={<PrivateRoute />}>
+                    <Route path="/vender" element={<VenderPage />} />
+                    <Route path="/my-inbox" element={<UserInboxPage />} />
+                </Route>
+                <Route path="/admin" element={<AdminRoute />}>
+                  <Route index element={<AdminDashboard />} />
+                </Route>
 
                 {/* Nuevas rutas de contenido */}
                 <Route path="/servicios" element={<ServiciosPage />} />

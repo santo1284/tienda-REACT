@@ -46,14 +46,17 @@ const Header = () => {
           {/* NAVEGACIÓN PRINCIPAL */}
           <nav className="hidden lg:flex items-center space-x-1">
             {[
-              { path: '/', label: 'Inicio' },
-              { path: '/products', label: 'Motos' },
-              { path: '/servicios', label: 'Servicios' },
-              { path: '/taller', label: 'Taller' },
-              { path: '/alquiler', label: 'Alquiler' },
-              { path: '/about', label: 'Nosotros' },
-              { path: '/contact', label: 'Contacto' }
-            ].map(({ path, label }) => (
+              { path: '/', label: 'Inicio', auth: false },
+              { path: '/products', label: 'Motos', auth: false },
+              { path: '/vender', label: 'Vender', auth: true },
+              { path: '/servicios', label: 'Servicios', auth: false },
+              { path: '/taller', label: 'Taller', auth: false },
+              { path: '/alquiler', label: 'Alquiler', auth: false },
+              { path: '/about', label: 'Nosotros', auth: false },
+              { path: '/contact', label: 'Contacto', auth: false }
+            ]
+            .filter(link => !link.auth || (link.auth && authState.isAuthenticated))
+            .map(({ path, label }) => (
               <Link
                 key={path}
                 to={path}
@@ -135,9 +138,17 @@ const Header = () => {
                   </button>
                   {isUserMenuOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 z-50">
+                      <Link
+                        to="/my-inbox"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Mis Publicaciones
+                      </Link>
+                      <div className="border-t border-gray-100"></div>
                       <button
                         onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-50"
                       >
                         Cerrar Sesión
                       </button>
@@ -170,7 +181,33 @@ const Header = () => {
 
         {/* NAVEGACIÓN MÓVIL */}
         <nav className={`lg:hidden mt-4 transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-          <div className="bg-gray-50 rounded-2xl p-4">
+          <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
+            {[
+              { path: '/', label: 'Inicio', auth: false },
+              { path: '/products', label: 'Motos', auth: false },
+              { path: '/vender', label: 'Vender', auth: true },
+              { path: '/servicios', label: 'Servicios', auth: false },
+              { path: '/taller', label: 'Taller', auth: false },
+              { path: '/alquiler', label: 'Alquiler', auth: false },
+              { path: '/about', label: 'Nosotros', auth: false },
+              { path: '/contact', label: 'Contacto', auth: false }
+            ]
+            .filter(link => !link.auth || (link.auth && authState.isAuthenticated))
+            .map(({ path, label }) => (
+              <Link
+                key={path}
+                to={path}
+                onClick={() => setIsMenuOpen(false)}
+                className={`block text-center font-bold py-3 px-4 rounded-xl transition-all duration-200 ${
+                  isActive(path)
+                    ? 'bg-orange-400 text-white shadow-md'
+                    : 'bg-white text-gray-800 hover:bg-gray-100'
+                }`}
+              >
+                {label}
+              </Link>
+            ))}
+
             {/* Auth buttons for mobile */}
             <div className="pt-4 border-t border-gray-200">
               {authState.isAuthenticated ? (
