@@ -9,28 +9,50 @@ const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
-    // TODO: Reemplazar con una llamada real a la API de registro
-    if (name && email && password) {
-      // Simular una respuesta exitosa del backend
-      const mockUser = {
-        id: Date.now().toString(), // ID único simple
-        name,
-        email,
-      };
-      const mockToken = 'fake-jwt-token-for-new-user';
+    try {
+      // Llamada real a la API de registro
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
 
-      // Iniciar sesión inmediatamente después del registro
-      dispatch({ type: 'LOGIN_SUCCESS', payload: { user: mockUser, token: mockToken } });
+      const data = await response.json();
 
-      // Redirigir al usuario
-      navigate('/');
-    } else {
-      setError('Todos los campos son obligatorios.');
+      if (response.ok) {
+        // Registro exitoso - iniciar sesión automáticamente
+        dispatch({ 
+          type: 'LOGIN_SUCCESS', 
+          payload: { 
+            user: data.user, 
+            token: data.token 
+          } 
+        });
+
+        // Redirigir al usuario
+        navigate('/');
+      } else {
+        // Error del servidor
+        setError(data.message || 'Error al crear la cuenta');
+      }
+    } catch (error) {
+      console.error('Error de registro:', error);
+      setError('Error de conexión. Intenta de nuevo.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,6 +86,7 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setName(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-lime-500 focus:border-lime-500 focus:z-10 sm:text-sm"
                 placeholder="Nombre completo"
+                disabled={loading}
               />
             </div>
             <div>
@@ -80,6 +103,7 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-lime-500 focus:border-lime-500 focus:z-10 sm:text-sm"
                 placeholder="Correo electrónico"
+                disabled={loading}
               />
             </div>
             <div>
@@ -96,6 +120,7 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-lime-500 focus:border-lime-500 focus:z-10 sm:text-sm"
                 placeholder="Contraseña"
+                disabled={loading}
               />
             </div>
           </div>
@@ -109,9 +134,10 @@ const RegisterPage: React.FC = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-lime-600 hover:bg-lime-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500"
+              disabled={loading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-lime-600 hover:bg-lime-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Crear Cuenta
+              {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
             </button>
           </div>
         </form>

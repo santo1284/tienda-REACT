@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-const reviewSchema = new mongoose.Schema({
+const reviewSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    required: true,
+    ref: 'User'
   },
-  userName: { // Denormalized for easy display
+  name: {
     type: String,
     required: true
   },
@@ -19,52 +19,138 @@ const reviewSchema = new mongoose.Schema({
   comment: {
     type: String,
     required: true
-  },
+  }
 }, {
   timestamps: true
 });
 
-const motorcycleSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  price: { type: Number, required: true },
-  image: { type: String, required: true },
-  additionalImages: [String],
-  category: { type: String, required: true },
-  year: { type: Number, required: true },
-  cc: { type: Number, required: true },
-  mileage: { type: Number, default: 0 },
-  condition: { type: String, enum: ['Nueva', 'Seminueva', 'Usada'], required: true },
-  transmission: { type: String, required: true },
-  fuel: { type: String, required: true },
-  description: { type: String, required: true },
+const motorcycleSchema = mongoose.Schema({
+  // Información del vendedor
   seller: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    required: true,
+    ref: 'User'
   },
-  availability: { type: String, default: 'Disponible' },
-  reservationPrice: { type: Number },
-  features: [String],
-  included: [String],
-  reviews: [reviewSchema], // Embedded reviews
-  averageRating: { type: Number, default: 0 },
-  location: { type: String, required: true },
-  negotiable: { type: Boolean, default: true },
-
-  // New fields for approval workflow
+  
+  // Información básica
+  name: {
+    type: String,
+    required: [true, 'El título es obligatorio']
+  },
+  brand: {
+    type: String,
+    required: [true, 'La marca es obligatoria']
+  },
+  model: {
+    type: String,
+    required: [true, 'El modelo es obligatorio']
+  },
+  
+  // Detalles técnicos
+  year: {
+    type: Number,
+    required: [true, 'El año es obligatorio'],
+    min: [1990, 'El año debe ser mayor a 1990'],
+    max: [new Date().getFullYear() + 1, 'El año no puede ser futuro']
+  },
+  cc: {
+    type: Number,
+    required: [true, 'El cilindraje es obligatorio'],
+    min: [50, 'El cilindraje debe ser mayor a 50cc']
+  },
+  category: {
+    type: String,
+    required: [true, 'La categoría es obligatoria'],
+    enum: ['Deportivas', 'Naked', 'Scooter', 'Enduro', 'Adventure', 'Street', 'Touring', 'Urbana']
+  },
+  condition: {
+    type: String,
+    required: [true, 'El estado es obligatorio'],
+    enum: ['Excelente', 'Muy Bueno', 'Bueno', 'Regular', 'Para Reparar'],
+    default: 'Bueno'
+  },
+  mileage: {
+    type: Number,
+    min: [0, 'El kilometraje no puede ser negativo']
+  },
+  
+  // Precio y ubicación
+  price: {
+    type: Number,
+    required: [true, 'El precio es obligatorio'],
+    min: [50000, 'El precio debe ser mayor a $50.000']
+  },
+  location: {
+    type: String,
+    required: [true, 'La ubicación es obligatoria'],
+    default: 'Garzón, Huila'
+  },
+  
+  // Descripción
+  description: {
+    type: String,
+    required: [true, 'La descripción es obligatoria'],
+    minLength: [50, 'La descripción debe tener al menos 50 caracteres']
+  },
+  
+  // Imágenes
+  images: [{
+    url: {
+      type: String,
+      required: true
+    },
+    public_id: String // Para Cloudinary
+  }],
+  
+  // Estado de la publicación
   status: {
     type: String,
-    enum: ['en revisión', 'aprobado', 'rechazado', 'requiere cambios'],
-    default: 'en revisión'
+    enum: ['pending', 'approved', 'rejected', 'sold'],
+    default: 'pending'
   },
-  adminNotes: {
-    type: String,
-    trim: true
+  
+  // Reseñas
+  reviews: [reviewSchema],
+  numReviews: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  rating: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  
+  // Información adicional
+  featured: {
+    type: Boolean,
+    default: false
+  },
+  views: {
+    type: Number,
+    default: 0
   }
 }, {
-  timestamps: true,
+  timestamps: true
 });
 
-const Motorcycle = mongoose.model('Motorcycle', motorcycleSchema);
+// Índices para mejor rendimiento
+motorcycleSchema.index({ seller: 1 });
+motorcycleSchema.index({ status: 1 });
+motorcycleSchema.index({ category: 1 });
+motorcycleSchema.index({ price: 1 });
+motorcycleSchema.index({ year: 1 });
+motorcycleSchema.index({ createdAt: -1 });
 
-module.exports = Motorcycle;
+// Virtual para el ID sin guion bajo
+motorcycleSchema.virtual('id').get(function() {
+  return this._id.toHexString();
+});
+
+// Asegurar que los virtuals se incluyan cuando se convierta a JSON
+motorcycleSchema.set('toJSON', {
+  virtuals: true
+});
+
+module.exports = mongoose.model('Motorcycle', motorcycleSchema);
