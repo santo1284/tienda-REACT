@@ -2,7 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
+import { Product } from '../types/Product';
 import { useAuth } from '../contexts/AuthContext'; // Importar useAuth
+
+
+// Función auxiliar para convertir ProductDetail a Product
+const convertToProduct = (productDetail: ProductDetail): Product => {
+  return {
+    id: productDetail.id,
+    name: productDetail.name,
+    price: productDetail.price,
+    image: productDetail.image,
+    category: productDetail.category,
+    brand: undefined, // ProductDetail no tiene brand
+    model: undefined, // ProductDetail no tiene model
+    year: productDetail.year,
+    cc: productDetail.cc,
+    condition: productDetail.condition,
+    mileage: productDetail.mileage,
+    location: productDetail.location,
+    description: productDetail.description,
+    images: productDetail.additionalImages ? 
+      productDetail.additionalImages.map(url => ({ url, public_id: '' })) : 
+      undefined,
+    seller: typeof productDetail.seller === 'string' ? 
+      { name: productDetail.seller, email: '' } : 
+      productDetail.seller,
+    rating: productDetail.averageRating,
+    numReviews: productDetail.reviews ? productDetail.reviews.length : 0,
+    status: productDetail.availability === 'Disponible' ? 'approved' : 'reserved'
+  };
+};
 
 interface Review {
   id: number;
@@ -49,8 +79,9 @@ const ProductDetailPage: React.FC = () => {
   const { dispatch: cartDispatch } = useCart();
   const { dispatch: dispatchFavorites, isFavorite } = useFavorites();
   const { state: authState } = useAuth(); // Usar el estado de autenticación
-  
   const [product, setProduct] = useState<ProductDetail | null>(null);
+  
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedImage, setSelectedImage] = useState(0);
@@ -63,52 +94,58 @@ const ProductDetailPage: React.FC = () => {
   const [submittingReview, setSubmittingReview] = useState(false);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`http://localhost:5000/api/products/${id}`);
-        
-        if (!response.ok) {
-          throw new Error('Producto no encontrado');
-        }
-        
-        const data = await response.json();
-        setProduct(data);
-        
-        const minAmount = Math.max(data.reservationPrice * 0.5, 100000);
-        setMinReservation(minAmount);
-        setReservationAmount(data.reservationPrice);
-        
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Error al cargar el producto');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchProduct = async () => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/products/${id}`);
 
-    if (id) {
-      fetchProduct();
+    // 👀 Ver el tipo de contenido
+    console.log("Content-Type:", response.headers.get("content-type"));
+
+    const text = await response.text();
+    console.log("Respuesta cruda:", text);
+
+    // Intentar parsear solo si realmente es JSON
+    if (response.headers.get("content-type")?.includes("application/json")) {
+      const data = JSON.parse(text);
+
+      // hacer el mapping aquí...
+      console.log("JSON parseado:", data);
+    } else {
+      throw new Error("El backend no devolvió JSON");
     }
-  }, [id]);
+  } catch (err: any) {
+    console.error("Error en fetchProduct:", err.message);
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  fetchProduct();
+}, [id]);
+
 
   // Botón "Añadir al Carrito" - usa el precio de reserva por defecto
   const handleAddToCart = () => {
-    if (product) {
-      cartDispatch({
-        type: 'ADD_TO_CART', 
-        payload: {
-          product: product,
-          reservationAmount: product.reservationPrice // Usa el precio de reserva por defecto
-        }
-      });
-      
-      const button = document.getElementById('add-to-cart-btn');
-      if (button) {
-        button.classList.add('animate-pulse');
-        setTimeout(() => button.classList.remove('animate-pulse'), 600);
+  if (product) {
+    const productForCart = convertToProduct(product);
+    
+    cartDispatch({
+      type: 'ADD_TO_CART', 
+      payload: {
+        product: productForCart,
+        reservationAmount: product.reservationPrice
       }
+    });
+    
+    const button = document.getElementById('add-to-cart-btn');
+    if (button) {
+      button.classList.add('animate-pulse');
+      setTimeout(() => button.classList.remove('animate-pulse'), 600);
     }
-  };
+  }
+};
 
   // Botón "Separar Ahora" - abre el modal
   const handleReserveVehicle = () => {
@@ -117,29 +154,31 @@ const ProductDetailPage: React.FC = () => {
     }
   };
 
-  // Confirmación desde el modal de reserva
+  // Actualizar la función handleReservationConfirm
   const handleReservationConfirm = () => {
     if (product) {
-      // TODO: Aquí iría la lógica de API si se necesitara confirmar la reserva en el backend
-
+      const productForCart = convertToProduct(product);
+      
       cartDispatch({
         type: 'ADD_TO_CART',
         payload: {
-          product: product,
-          reservationAmount: reservationAmount // Usa el monto seleccionado en el modal
+          product: productForCart,
+          reservationAmount: reservationAmount
         }
       });
 
       setShowReservationModal(false);
-      navigate('/cart'); // Lleva al usuario al carrito para que vea lo que agregó
+      navigate('/cart');
     }
   };
 
-  const handleToggleFavorite = () => {
-    if (product) {
-      dispatchFavorites({ type: 'TOGGLE_FAVORITE', payload: product });
-    }
-  };
+  // Actualizar la función handleToggleFavorite
+    const handleToggleFavorite = () => {
+      if (product) {
+        const productForFavorites = convertToProduct(product);
+        dispatchFavorites({ type: 'TOGGLE_FAVORITE', payload: productForFavorites });
+      }
+    };
 
   const handleSubmitReview = async () => {
     if (product && newReview.comment.trim() && authState.isAuthenticated) {

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { Product } from '../hooks/useProducts';
+import { Product } from '../types/Product';
 
 // Extendemos Product para incluir el monto de reserva. Ya no hay 'quantity'.
 interface CartItem extends Product {

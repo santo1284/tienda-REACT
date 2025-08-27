@@ -1,10 +1,15 @@
+const express = require('express');
+const router = express.Router();
 const Motorcycle = require('../models/Motorcycle');
-const User = require('../models/User'); // Asegúrate de tener el modelo User también
+const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const { protect } = require('../middleware/auth'); 
+
 
 // @desc    Obtener todas las motos aprobadas
 // @route   GET /api/products
 // @access  Public
-const getMotorcycles = async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const pageSize = 12;
     const page = Number(req.query.pageNumber) || 1;
@@ -47,12 +52,12 @@ const getMotorcycles = async (req, res) => {
     console.error('Error en getMotorcycles:', error);
     res.status(500).json({ message: 'Error del servidor', error: error.message });
   }
-};
+});
 
 // @desc    Crear una nueva moto
 // @route   POST /api/products
 // @access  Private
-const createMotorcycle = async (req, res) => {
+router.post('/', protect, async (req, res) => {
   try {
     console.log('Datos recibidos en createMotorcycle:', req.body);
     console.log('Usuario autenticado:', req.user);
@@ -94,7 +99,7 @@ const createMotorcycle = async (req, res) => {
       location: location || 'Garzón, Huila',
       description: description.trim(),
       images: [{
-        url: 'https://via.placeholder.com/400x300.png?text=Imagen+Temporal',
+        url: '/images/placeholder.png',
         public_id: 'placeholder'
       }], // Imagen temporal mientras se implementa la subida real
       status: 'pending' // Requiere aprobación de admin
@@ -129,12 +134,12 @@ const createMotorcycle = async (req, res) => {
       error: error.message 
     });
   }
-};
+});
 
 // @desc    Obtener las motos del usuario logueado
 // @route   GET /api/products/my-listings
 // @access  Private
-const getMyMotorcycles = async (req, res) => {
+router.get('/my-listings', protect, async (req, res) => {
   try {
     const motorcycles = await Motorcycle.find({ seller: req.user._id })
       .sort({ createdAt: -1 });
@@ -147,48 +152,17 @@ const getMyMotorcycles = async (req, res) => {
     console.error('Error en getMyMotorcycles:', error);
     res.status(500).json({ message: 'Error del servidor', error: error.message });
   }
-};
+});
 
 // @desc    Obtener una moto por ID
 // @route   GET /api/products/:id
-// @access  Public
-const getMotorcycleById = async (req, res) => {
-  try {
-    const motorcycle = await Motorcycle.findById(req.params.id)
-      .populate('seller', 'name email')
-      .populate('reviews.user', 'name');
+// @access  Public (con autenticación opcional)
 
-    if (!motorcycle) {
-      return res.status(404).json({ message: 'Moto no encontrada' });
-    }
-
-    // Solo mostrar motos aprobadas a usuarios no autenticados
-    // Los propietarios y admins pueden ver sus propias motos en cualquier estado
-    if (motorcycle.status !== 'approved' && 
-        (!req.user || (req.user._id.toString() !== motorcycle.seller._id.toString() && req.user.role !== 'admin'))) {
-      return res.status(404).json({ message: 'Moto no encontrada' });
-    }
-
-    // Incrementar contador de vistas (solo si no es el propietario)
-    if (!req.user || req.user._id.toString() !== motorcycle.seller._id.toString()) {
-      motorcycle.views += 1;
-      await motorcycle.save();
-    }
-
-    res.json(motorcycle);
-  } catch (error) {
-    console.error('Error en getMotorcycleById:', error);
-    if (error.kind === 'ObjectId') {
-      return res.status(404).json({ message: 'Moto no encontrada' });
-    }
-    res.status(500).json({ message: 'Error del servidor', error: error.message });
-  }
-};
 
 // @desc    Crear una reseña
 // @route   POST /api/products/:id/reviews
 // @access  Private
-const createMotorcycleReview = async (req, res) => {
+router.post('/:id/reviews', protect, async (req, res) => {
   try {
     const { rating, comment } = req.body;
 
@@ -240,12 +214,6 @@ const createMotorcycleReview = async (req, res) => {
     console.error('Error en createMotorcycleReview:', error);
     res.status(500).json({ message: 'Error del servidor', error: error.message });
   }
-};
+});
 
-module.exports = {
-  getMotorcycles,
-  createMotorcycle,
-  getMyMotorcycles,
-  getMotorcycleById,
-  createMotorcycleReview
-};
+module.exports = router;

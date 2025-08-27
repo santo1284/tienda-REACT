@@ -1,6 +1,8 @@
+const express = require('express');
+const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-
+const { protect } = require('../middleware/auth');
 
 // Función para generar JWT
 const generateToken = (id) => {
@@ -9,10 +11,11 @@ const generateToken = (id) => {
   });
 };
 
+
 // @desc    Registrar un nuevo usuario
 // @route   POST /api/auth/register
 // @access  Public
-const register = async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     console.log('Datos recibidos en register:', req.body);
 
@@ -91,12 +94,12 @@ const register = async (req, res) => {
       error: error.message 
     });
   }
-};
+});
 
 // @desc    Autenticar usuario (login)
 // @route   POST /api/auth/login
 // @access  Public
-const login = async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     console.log('Intento de login:', req.body.email);
 
@@ -158,12 +161,12 @@ const login = async (req, res) => {
       error: error.message 
     });
   }
-};
+});
 
 // @desc    Obtener perfil del usuario actual
 // @route   GET /api/auth/profile
 // @access  Private
-const getProfile = async (req, res) => {
+router.get('/profile', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     
@@ -194,10 +197,6 @@ const getProfile = async (req, res) => {
       error: error.message 
     });
   }
-};
+});
 
-module.exports = {
-  register,
-  login,
-  getProfile
-};
+module.exports = router;

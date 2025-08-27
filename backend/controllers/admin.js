@@ -6,10 +6,13 @@ const Rental = require('../models/Rental');
 // @access  Private/Admin
 const getPendingMotorcycles = async (req, res) => {
   try {
-    const pendingMotorcycles = await Motorcycle.find({ status: 'en revisión' }).populate('seller', 'name email');
+    const pendingMotorcycles = await Motorcycle.find({ status: 'pending' }).populate('seller', 'name email');
+    
+    console.log('Motos pendientes encontradas:', pendingMotorcycles.length);
+    
     res.json(pendingMotorcycles);
   } catch (error) {
-    console.error(error.message);
+    console.error('Error en getPendingMotorcycles:', error.message);
     res.status(500).send('Error del Servidor');
   }
 };
@@ -21,10 +24,17 @@ const updateMotorcycleStatus = async (req, res) => {
   const { status, adminNotes } = req.body;
   const { id } = req.params;
 
-  // Validación básica del estado
-  const validStatuses = ['aprobado', 'rechazado', 'requiere cambios'];
+  console.log('Actualizando moto:', id, 'a estado:', status); // Debug
+
+  // Estados válidos según tu modelo Motorcycle.js
+  const validStatuses = ['pending', 'approved', 'rejected', 'sold'];
   if (!validStatuses.includes(status)) {
-    return res.status(400).json({ msg: 'Estado no válido' });
+    console.log('Estado inválido recibido:', status); // Debug
+    return res.status(400).json({ 
+      msg: 'Estado no válido', 
+      receivedStatus: status,
+      validStatuses: validStatuses 
+    });
   }
 
   try {
@@ -34,18 +44,30 @@ const updateMotorcycleStatus = async (req, res) => {
       return res.status(404).json({ msg: 'Motocicleta no encontrada' });
     }
 
+    console.log('Estado anterior:', motorcycle.status); // Debug
+
     motorcycle.status = status;
-    if (adminNotes) {
-      motorcycle.adminNotes = adminNotes;
-    } else {
-        motorcycle.adminNotes = ''; // Limpiar notas si no se envían
+    
+    // Solo agregar adminNotes si se proporciona
+    if (adminNotes && adminNotes.trim() !== '') {
+      motorcycle.adminNotes = adminNotes.trim();
     }
 
     const updatedMotorcycle = await motorcycle.save();
+    
+    console.log('Moto actualizada exitosamente:', {
+      id: updatedMotorcycle._id,
+      newStatus: updatedMotorcycle.status,
+      adminNotes: updatedMotorcycle.adminNotes || 'Sin notas'
+    });
+    
     res.json(updatedMotorcycle);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Error del Servidor');
+    console.error('Error en updateMotorcycleStatus:', error);
+    res.status(500).json({ 
+      msg: 'Error del Servidor', 
+      error: error.message 
+    });
   }
 };
 

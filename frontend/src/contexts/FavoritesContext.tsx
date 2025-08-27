@@ -1,17 +1,7 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import { Product } from '../types/Product';
 
-// Tipos
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-  brand?: string;
-  year?: number;
-  description?: string;
-}
-
+// Estados y acciones para favoritos
 interface FavoritesState {
   items: Product[];
   itemCount: number;
