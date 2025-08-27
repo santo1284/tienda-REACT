@@ -17,15 +17,13 @@ const generateToken = (id) => {
 // @access  Public
 router.post('/register', async (req, res) => {
   try {
-    console.log('Datos recibidos en register:', req.body);
-
-    const { name, email, password } = req.body;
+    const { name, email, password, phone } = req.body;
 
     // Validación de campos requeridos
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !phone) {
       return res.status(400).json({
-        message: 'Todos los campos son obligatorios',
-        required: ['name', 'email', 'password']
+        message: 'Todos los campos (nombre, email, contraseña, teléfono) son obligatorios',
+        required: ['name', 'email', 'password', 'phone']
       });
     }
 
@@ -48,13 +46,12 @@ router.post('/register', async (req, res) => {
     const user = await User.create({
       name: name.trim(),
       email: email.toLowerCase().trim(),
-      password
+      password,
+      phone: phone.trim()
     });
 
     if (user) {
       const token = generateToken(user._id);
-      
-      console.log('Usuario registrado exitosamente:', user._id);
       
       res.status(201).json({
         message: 'Usuario registrado exitosamente',
@@ -63,6 +60,7 @@ router.post('/register', async (req, res) => {
           name: user.name,
           email: user.email,
           role: user.role,
+          phone: user.phone,
           isActive: user.isActive
         },
         token

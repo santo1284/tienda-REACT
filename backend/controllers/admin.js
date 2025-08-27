@@ -73,13 +73,49 @@ const updateMotorcycleStatus = async (req, res) => {
 
 // RENTAL MANAGEMENT
 const createRental = async (req, res) => {
-    try {
-        const rental = new Rental(req.body);
-        const createdRental = await rental.save();
-        res.status(201).json(createdRental);
-    } catch (error) {
-        res.status(400).json({ message: 'Error al crear alquiler', error: error.message });
+  try {
+    const {
+      model,
+      pricePerDay,
+      pricePerHour,
+      description,
+      cc,
+      category,
+      condition,
+      contactNumber,
+      images // Inyectado por el middleware
+    } = req.body;
+
+    // Validar que la imagen se haya subido
+    if (!images || images.length === 0) {
+      return res.status(400).json({ message: 'La imagen es obligatoria.' });
     }
+
+    const newRental = new Rental({
+      model,
+      pricePerDay,
+      pricePerHour,
+      description,
+      cc,
+      category,
+      condition,
+      contactNumber,
+      image: images[0].url, // Guardamos la URL de la imagen
+      // public_id de la imagen no se está guardando en este modelo, se puede añadir si es necesario para borrarla
+    });
+
+    const savedRental = await newRental.save();
+    res.status(201).json(savedRental);
+  } catch (error) {
+     if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(e => e.message);
+      return res.status(400).json({
+        message: 'Datos de alquiler inválidos',
+        errors
+      });
+    }
+    res.status(500).json({ message: 'Error al crear el alquiler', error: error.message });
+  }
 };
 
 const getRentals = async (req, res) => {

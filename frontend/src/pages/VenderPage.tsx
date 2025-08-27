@@ -77,34 +77,14 @@ const VenderPage: React.FC = () => {
     setImagePreviews(prev => prev.filter((_, i) => i !== index));
   };
 
-  const uploadImages = async (motorcycleId: string) => {
-    const uploadPromises = images.map(async (image) => {
-      const formData = new FormData();
-      formData.append('image', image);
-      formData.append('motorcycleId', motorcycleId);
-
-      // Aquí harías la llamada a tu API para subir imágenes
-      // Por ahora simulo que devuelve una URL
-      return `https://api.mimotodelpueblo.com/images/${Date.now()}_${image.name}`;
-    });
-
-    try {
-      const imageUrls = await Promise.all(uploadPromises);
-      return imageUrls;
-    } catch (error) {
-      console.error('Error uploading images:', error);
-      throw new Error('Error al subir las imágenes');
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
     setLoading(true);
 
-    if (!authState.user) {
-      setError('Debes iniciar sesión para publicar.');
+    if (!authState.token) {
+      setError('Debes iniciar sesión para enviar una propuesta.');
       setLoading(false);
       return;
     }
@@ -115,30 +95,31 @@ const VenderPage: React.FC = () => {
       return;
     }
 
+    // Crear objeto FormData para enviar archivos y datos
+    const dataToSend = new FormData();
+
+    // Adjuntar todos los campos del formulario
+    Object.entries(formData).forEach(([key, value]) => {
+      dataToSend.append(key, value);
+    });
+
+    // Adjuntar la imagen (solo la primera, ya que el backend espera una)
+    dataToSend.append('image', images[0]);
+
     try {
-      // Primero crear la moto
       const response = await fetch('http://localhost:5000/api/products', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          // NO establecer Content-Type, el navegador lo hará automáticamente con el boundary correcto
           'Authorization': `Bearer ${authState.token}`
         },
-        body: JSON.stringify({
-          ...formData,
-          price: parseInt(formData.price),
-          year: parseInt(formData.year),
-          cc: parseInt(formData.cc),
-          mileage: formData.mileage ? parseInt(formData.mileage) : undefined,
-        }),
+        body: dataToSend,
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Luego subir las imágenes (en un caso real)
-        // const imageUrls = await uploadImages(data.motorcycle.id);
-        
-        setSuccess('¡Tu moto ha sido enviada para revisión! Serás notificado cuando sea aprobada.');
+        setSuccess('¡Tu propuesta ha sido enviada para revisión! Un asesor se pondrá en contacto contigo.');
         
         // Limpiar formulario
         setFormData({
@@ -158,14 +139,14 @@ const VenderPage: React.FC = () => {
         setImagePreviews([]);
         
         setTimeout(() => {
-          navigate('/');
+          navigate('/products');
         }, 3000);
       } else {
-        setError(data.message || 'Error al publicar la moto');
+        setError(data.message || 'Error al enviar la propuesta.');
       }
     } catch (err: any) {
-      setError('Error de conexión. Intenta de nuevo.');
-      console.error('Error:', err);
+      setError('Error de conexión. Por favor, intenta de nuevo.');
+      console.error('Error en handleSubmit:', err);
     } finally {
       setLoading(false);
     }

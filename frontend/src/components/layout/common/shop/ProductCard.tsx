@@ -59,6 +59,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {product.category}
           </span>
         </div>
+
+        {/* BADGE DE DISPONIBILIDAD */}
+        {product.availability && product.availability !== 'available' && (
+          <div className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-lg">
+            {product.availability === 'sold' ? 'Vendido' : 'Reservado'}
+          </div>
+        )}
         
        
 
@@ -116,16 +123,27 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           ))}
         </div>
         
-        {/* BOTÓN DE AGREGAR AL CARRITO */}
+        {/* BOTÓN DE AGREGAR AL CARRITO / ESTADO */}
         <button 
           id={`add-btn-${product.id}`}
           onClick={handleAddToCart}
-          className="w-full bg-lime-400 hover:bg-lime-500 text-black font-bold py-3 px-6 rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2"
+          disabled={product.availability !== 'available'}
+          className={`w-full font-bold py-3 px-6 rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2 ${
+            product.availability === 'available'
+              ? 'bg-lime-400 hover:bg-lime-500 text-black'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 4H19m-10-4v6a2 2 0 104 0v-6m-4 0h4" />
-          </svg>
-          <span>Agregar al Carrito</span>
+          {product.availability === 'available' ? (
+            <>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 4H19m-10-4v6a2 2 0 104 0v-6m-4 0h4" />
+              </svg>
+              <span>Agregar al Carrito</span>
+            </>
+          ) : (
+            <span>No Disponible</span>
+          )}
         </button>
       </div>
       

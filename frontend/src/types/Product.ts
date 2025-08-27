@@ -32,6 +32,7 @@ export interface Product {
   
   // Estado de la publicación
   status?: string;
+  availability?: 'available' | 'sold' | 'reserved' | 'rented' | 'maintenance';
 }
 
 // Interfaz para la respuesta del backend

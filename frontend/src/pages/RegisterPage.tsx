@@ -6,6 +6,7 @@ const RegisterPage: React.FC = () => {
   const { dispatch } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,6 +28,7 @@ const RegisterPage: React.FC = () => {
           name,
           email,
           password,
+          phone,
         }),
       });
 
@@ -86,6 +88,23 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setName(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-lime-500 focus:border-lime-500 focus:z-10 sm:text-sm"
                 placeholder="Nombre completo"
+                disabled={loading}
+              />
+            </div>
+            <div>
+              <label htmlFor="phone" className="sr-only">
+                Teléfono
+              </label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                autoComplete="tel"
+                required
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-lime-500 focus:border-lime-500 focus:z-10 sm:text-sm"
+                placeholder="Número de teléfono"
                 disabled={loading}
               />
             </div>
