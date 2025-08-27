@@ -3,7 +3,8 @@ const router = express.Router();
 const Motorcycle = require('../models/Motorcycle');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const { protect } = require('../middleware/auth'); 
+const { protect } = require('../middleware/auth');
+const { uploadImage } = require('../middleware/upload');
 
 
 // @desc    Obtener todas las motos aprobadas
@@ -54,14 +55,11 @@ router.get('/', async (req, res) => {
   }
 });
 
-// @desc    Crear una nueva moto
+// @desc    Crear una nueva moto (propuesta de venta)
 // @route   POST /api/products
 // @access  Private
-router.post('/', protect, async (req, res) => {
+router.post('/', protect, uploadImage, async (req, res) => {
   try {
-    console.log('Datos recibidos en createMotorcycle:', req.body);
-    console.log('Usuario autenticado:', req.user);
-
     const {
       name,
       brand,
@@ -73,7 +71,8 @@ router.post('/', protect, async (req, res) => {
       mileage,
       price,
       location,
-      description
+      description,
+      images // Inyectado por el middleware uploadImage
     } = req.body;
 
     // Validaciones básicas
@@ -82,6 +81,11 @@ router.post('/', protect, async (req, res) => {
         message: 'Faltan campos obligatorios',
         required: ['name', 'brand', 'model', 'year', 'cc', 'price', 'description']
       });
+    }
+
+    // La imagen es requerida para una nueva propuesta
+    if (!images || images.length === 0) {
+      return res.status(400).json({ message: 'La imagen es obligatoria.' });
     }
 
     // Crear nueva moto
@@ -98,29 +102,22 @@ router.post('/', protect, async (req, res) => {
       price: parseInt(price),
       location: location || 'Garzón, Huila',
       description: description.trim(),
-      images: [{
-        url: '/images/placeholder.png',
-        public_id: 'placeholder'
-      }], // Imagen temporal mientras se implementa la subida real
+      images: images, // Usar la imagen de Cloudinary
       status: 'pending' // Requiere aprobación de admin
     });
 
     const savedMotorcycle = await motorcycle.save();
     
-    // Poblar la información del vendedor antes de enviar
     await savedMotorcycle.populate('seller', 'name email');
 
-    console.log('Moto creada exitosamente:', savedMotorcycle._id);
-
     res.status(201).json({
-      message: 'Moto creada exitosamente. Será revisada antes de publicarse.',
+      message: 'Propuesta de venta enviada exitosamente. Será revisada por un administrador.',
       motorcycle: savedMotorcycle
     });
 
   } catch (error) {
     console.error('Error en createMotorcycle:', error);
     
-    // Manejar errores de validación de MongoDB
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(e => e.message);
       return res.status(400).json({ 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { CartProvider } from './contexts/CartContext';
 import { FavoritesProvider } from './contexts/FavoritesContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -29,7 +29,6 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <FavoritesProvider>
-          <Router>
             <Layout>
               <Routes>
                 {/* Rutas existentes */}
@@ -79,7 +78,6 @@ function App() {
                 } />
               </Routes>
             </Layout>
-          </Router>
         </FavoritesProvider>
       </CartProvider>
     </AuthProvider>

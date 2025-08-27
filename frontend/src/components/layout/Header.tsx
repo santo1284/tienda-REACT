@@ -22,6 +22,28 @@ const Header = () => {
     navigate('/');
   };
 
+  const isAdmin = authState.user?.role === 'admin';
+
+  const navLinks = [
+    { path: '/', label: 'Inicio', auth: false, adminOnly: false },
+    { path: '/products', label: 'Motos', auth: false, adminOnly: false },
+    // Link dinámico para Vender / Publicar
+    isAdmin
+      ? { path: '/admin/publish', label: 'Publicar Moto', auth: true, adminOnly: true }
+      : { path: '/vender', label: 'Vender', auth: true, adminOnly: false, userOnly: true },
+    { path: '/alquiler', label: 'Alquiler', auth: false, adminOnly: false },
+    { path: '/admin', label: 'Panel Admin', auth: true, adminOnly: true },
+    { path: '/about', label: 'Nosotros', auth: false, adminOnly: false },
+    { path: '/contact', label: 'Contacto', auth: false, adminOnly: false },
+  ];
+
+  const filteredNavLinks = navLinks.filter(link => {
+    if (link.adminOnly) return authState.isAuthenticated && isAdmin;
+    if (link.userOnly) return authState.isAuthenticated && !isAdmin;
+    if (link.auth) return authState.isAuthenticated;
+    return true; // Enlaces públicos
+  });
+
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50 border-b border-gray-100">
       <div className="container mx-auto px-6 py-4">
@@ -45,18 +67,7 @@ const Header = () => {
           
           {/* NAVEGACIÓN PRINCIPAL */}
           <nav className="hidden lg:flex items-center space-x-1">
-            {[
-              { path: '/', label: 'Inicio', auth: false },
-              { path: '/products', label: 'Motos', auth: false },
-              { path: '/vender', label: 'Vender', auth: true },
-              { path: '/servicios', label: 'Servicios', auth: false },
-              { path: '/taller', label: 'Taller', auth: false },
-              { path: '/alquiler', label: 'Alquiler', auth: false },
-              { path: '/about', label: 'Nosotros', auth: false },
-              { path: '/contact', label: 'Contacto', auth: false }
-            ]
-            .filter(link => !link.auth || (link.auth && authState.isAuthenticated))
-            .map(({ path, label }) => (
+            {filteredNavLinks.map(({ path, label }) => (
               <Link
                 key={path}
                 to={path}
@@ -138,12 +149,21 @@ const Header = () => {
                   </button>
                   {isUserMenuOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 z-50">
+                      {isAdmin && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="block px-4 py-2 text-sm font-bold text-orange-600 hover:bg-gray-100"
+                        >
+                          Panel de Administrador
+                        </Link>
+                      )}
                       <Link
                         to="/my-inbox"
                         onClick={() => setIsUserMenuOpen(false)}
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
-                        Mis Publicaciones
+                        Mis Propuestas
                       </Link>
                       <div className="border-t border-gray-100"></div>
                       <button
@@ -182,18 +202,7 @@ const Header = () => {
         {/* NAVEGACIÓN MÓVIL */}
         <nav className={`lg:hidden mt-4 transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
           <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
-            {[
-              { path: '/', label: 'Inicio', auth: false },
-              { path: '/products', label: 'Motos', auth: false },
-              { path: '/vender', label: 'Vender', auth: true },
-              { path: '/servicios', label: 'Servicios', auth: false },
-              { path: '/taller', label: 'Taller', auth: false },
-              { path: '/alquiler', label: 'Alquiler', auth: false },
-              { path: '/about', label: 'Nosotros', auth: false },
-              { path: '/contact', label: 'Contacto', auth: false }
-            ]
-            .filter(link => !link.auth || (link.auth && authState.isAuthenticated))
-            .map(({ path, label }) => (
+            {filteredNavLinks.map(({ path, label }) => (
               <Link
                 key={path}
                 to={path}

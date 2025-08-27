@@ -40,6 +40,7 @@ const userSchema = mongoose.Schema({
   },
   phone: {
     type: String,
+    required: [true, 'El número de teléfono es obligatorio'],
     trim: true
   },
   location: {
