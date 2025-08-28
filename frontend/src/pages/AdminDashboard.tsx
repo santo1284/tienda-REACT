@@ -142,6 +142,9 @@ const AdminDashboard: React.FC = () => {
 
   const closeModal = () => setIsModalOpen(false);
 
+  // ✅ Nueva función para cerrar el modal de detalles
+  const closeDetailsModal = () => setSelectedMoto(null);
+
   const handleDeleteRental = async (id: number) => {
     if (window.confirm('¿Estás seguro?')) {
         try {
@@ -241,6 +244,91 @@ const AdminDashboard: React.FC = () => {
         </div>
       )}
 
+      {/* ✅ Modal de detalles de la moto seleccionada */}
+      {selectedMoto && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold">Detalles de la Motocicleta</h2>
+              <button 
+                onClick={closeDetailsModal}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {selectedMoto.images && selectedMoto.images.length > 0 && (
+                <div className="mb-4">
+                  <img 
+                    src={selectedMoto.images[0].url} 
+                    alt={selectedMoto.name}
+                    className="w-full h-64 object-cover rounded-lg"
+                  />
+                </div>
+              )}
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h3 className="font-semibold text-gray-700">Información General</h3>
+                  <p><strong>Nombre:</strong> {selectedMoto.name}</p>
+                  <p><strong>Modelo:</strong> {selectedMoto.model}</p>
+                  <p><strong>Marca:</strong> {selectedMoto.brand}</p>
+                  <p><strong>Precio:</strong> {formatPrice(selectedMoto.price)}</p>
+                  <p><strong>Categoría:</strong> {selectedMoto.category}</p>
+                  <p><strong>Condición:</strong> {selectedMoto.condition}</p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-gray-700">Especificaciones</h3>
+                  <p><strong>Cilindraje:</strong> {selectedMoto.cc} cc</p>
+                  <p><strong>Kilómetros:</strong> {selectedMoto.km || 'No especificado'} km</p>
+                  <p><strong>Año:</strong> {selectedMoto.year || 'No especificado'}</p>
+                  <p><strong>Disponibilidad:</strong> {selectedMoto.availability}</p>
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="font-semibold text-gray-700">Descripción</h3>
+                <p className="text-gray-600 mt-1">{selectedMoto.description}</p>
+              </div>
+              
+              {selectedMoto.seller && (
+                <div>
+                  <h3 className="font-semibold text-gray-700">Información del Vendedor</h3>
+                  <p><strong>Nombre:</strong> {selectedMoto.seller.name}</p>
+                  <p><strong>Email:</strong> {selectedMoto.seller.email}</p>
+                  <p><strong>Teléfono:</strong> {selectedMoto.contactNumber}</p>
+                </div>
+              )}
+              
+              <div className="flex justify-end space-x-4 pt-4">
+                <button 
+                  onClick={closeDetailsModal}
+                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                >
+                  Cerrar
+                </button>
+                <button 
+                  onClick={() => handleStatusUpdate(selectedMoto.id.toString(), 'approved')} 
+                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                >
+                  Aprobar
+                </button>
+                <button 
+                  onClick={() => handleStatusUpdate(selectedMoto.id.toString(), 'rejected')} 
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                >
+                  Rechazar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para crear/editar alquiler */}
       {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-lg">

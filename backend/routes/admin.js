@@ -11,6 +11,26 @@ const {
 const { protect, admin } = require('../middleware/auth');
 const { uploadImage } = require('../middleware/upload');
 
+// @desc    Obtener todas las motos para gestión
+// @route   GET /api/admin/motorcycles/all
+// @access  Private/Admin
+router.get('/motorcycles/all', async (req, res) => {
+    try {
+        const motorcycles = await Motorcycle.find({})
+            .populate('seller', 'name email')
+            .sort({ createdAt: -1 })
+            .select('name brand model year cc price status availability images description condition mileage location createdAt');
+
+        res.json({
+            motorcycles,
+            total: motorcycles.length
+        });
+    } catch (error) {
+        console.error('Error al obtener todas las motos:', error);
+        res.status(500).json({ message: 'Error del servidor' });
+    }
+});
+
 // Todas las rutas en este archivo están protegidas y requieren rol de admin
 router.use(protect, admin);
 

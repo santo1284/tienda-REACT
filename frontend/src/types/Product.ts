@@ -1,6 +1,7 @@
 // types/Product.ts - Interfaz unificada para productos
 
 export interface Product {
+  km: string;
   id: number;
   name: string;
   price: number;
@@ -33,9 +34,9 @@ export interface Product {
   rating?: number;
   numReviews?: number;
   
-  // Estado de la publicación
-  status?: string;
-  availability?: 'available' | 'sold' | 'reserved' | 'rented' | 'maintenance';
+ // Estado de la publicación y disponibilidad
+  status?: 'pending' | 'approved' | 'rejected' | 'sold';
+  availability?: 'available' | 'sold' | 'reserved' | 'maintenance';
 }
 
 // Interfaz para la respuesta del backend
