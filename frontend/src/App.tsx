@@ -18,9 +18,10 @@ import RegisterPage from './pages/RegisterPage';
 import ServiciosPage from './pages/ServiciosPage'; // Importar ServiciosPage
 import TallerPage from './pages/TallerPage'; // Importar TallerPage
 import AlquilerPage from './pages/AlquilerPage'; // Importar AlquilerPage
-import VenderPage from './pages/VenderPage';
+import ProposeSalePage from './pages/ProposeSalePage';
 import PrivateRoute from './components/routing/PrivateRoute';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminPublishPage from './pages/AdminPublishPage'; // Importar la nueva página
 import AdminRoute from './components/routing/AdminRoute';
 import UserInboxPage from './pages/UserInboxPage';
 
@@ -44,11 +45,12 @@ function App() {
 
                 {/* Rutas Protegidas */}
                 <Route element={<PrivateRoute />}>
-                    <Route path="/vender" element={<VenderPage />} />
+                    <Route path="/vender" element={<ProposeSalePage />} />
                     <Route path="/my-inbox" element={<UserInboxPage />} />
                 </Route>
                 <Route path="/admin" element={<AdminRoute />}>
                   <Route index element={<AdminDashboard />} />
+                  <Route path="publish" element={<AdminPublishPage />} />
                 </Route>
 
                 {/* Nuevas rutas de contenido */}

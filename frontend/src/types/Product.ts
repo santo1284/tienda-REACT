@@ -8,7 +8,7 @@ export interface Product {
   image: string; // Siempre requerido, con fallback en el hook
   category: string;
   
-  
+
   // Campos opcionales adicionales
   brand?: string;
   model?: string;

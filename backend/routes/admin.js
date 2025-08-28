@@ -25,6 +25,42 @@ router.get('/motorcycles/pending', getPendingMotorcycles);
 // @access  Private/Admin
 router.put('/motorcycles/:id/status', updateMotorcycleStatus);
 
+// @desc    Publicar una nueva moto directamente
+// @route   POST /api/admin/products
+// @access  Private/Admin
+router.post('/products', uploadImage, async (req, res) => {
+    try {
+        const {
+            name, brand, model, year, cc, category, condition,
+            mileage, price, location, description, images
+        } = req.body;
+
+        // Validar que la imagen se haya subido
+        if (!images || images.length === 0) {
+            return res.status(400).json({ message: 'La imagen es obligatoria.' });
+        }
+
+        const motorcycle = new Motorcycle({
+            seller: req.user._id, // El admin que la publica
+            name, brand, model, year, cc, category, condition,
+            mileage, price, location, description,
+            images: images,
+            status: 'approved', // Se aprueba directamente
+            availability: 'available'
+        });
+
+        const savedMotorcycle = await motorcycle.save();
+        res.status(201).json(savedMotorcycle);
+
+    } catch (error) {
+        if (error.name === 'ValidationError') {
+            const errors = Object.values(error.errors).map(e => e.message);
+            return res.status(400).json({ message: 'Datos inválidos', errors });
+        }
+        res.status(500).json({ message: 'Error al publicar la moto', error: error.message });
+    }
+});
+
 // Rental management routes
 router.route('/rentals')
     .post(uploadImage, createRental)

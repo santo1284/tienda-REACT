@@ -19,7 +19,14 @@ const UserInboxPage: React.FC = () => {
     const fetchMyMotorcycles = async () => {
       try {
         const { data } = await api.get('/products/my-listings');
-        setMyMotorcycles(data);
+        // El backend devuelve un objeto { motorcycles: [...] }, accedemos al array
+        if (data && Array.isArray(data.motorcycles)) {
+          setMyMotorcycles(data.motorcycles);
+        } else {
+          // Si la respuesta no es el formato esperado, evitamos el error .map
+          setMyMotorcycles([]);
+          console.error("La respuesta de la API no tiene el formato esperado:", data);
+        }
       } catch (err) {
         setError('No se pudieron cargar tus publicaciones.');
       } finally {

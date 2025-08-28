@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Bike, DollarSign, Clock } from 'lucide-react';
+
 // Definir la interfaz para un objeto de alquiler
 interface Rental {
   id: string;
