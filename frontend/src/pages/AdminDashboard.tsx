@@ -49,7 +49,7 @@ const AdminDashboard: React.FC = () => {
       try {
         const [pendingRes, rentalsRes, transactionsRes] = await Promise.all([
           api.get('/admin/motorcycles/pending'),
-          api.get('/api/rentals'),
+          api.get('/admin/rentals'),
           api.get('/admin/transactions')
         ]);
         setPending(pendingRes.data);

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Motorcycle, DollarSign, Clock } from 'lucide-react';
-
+import { Bike, DollarSign, Clock } from 'lucide-react';
 // Definir la interfaz para un objeto de alquiler
 interface Rental {
   id: string;
@@ -85,7 +84,7 @@ const AlquilerPage: React.FC = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-            <Motorcycle className="w-8 h-8 text-blue-600" />
+            <Bike className="w-8 h-8 text-blue-600" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900">Alquiler de Motos</h1>
           <p className="text-lg text-gray-600 mt-2">
