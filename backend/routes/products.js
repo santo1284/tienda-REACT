@@ -151,10 +151,104 @@ router.get('/my-listings', protect, async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Validar que el ID sea válido para MongoDB
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ message: 'ID de producto no válido' });
+    }
+
+    const motorcycle = await Motorcycle.findById(id)
+      .populate('seller', 'name email')
+      .populate('reviews.user', 'name');
+    
+    if (!motorcycle) {
+      return res.status(404).json({ message: 'Producto no encontrado' });
+    }
+
+    // Solo mostrar productos aprobados a usuarios no autenticados
+    // Los vendedores y admins pueden ver sus propios productos
+    const authHeader = req.headers.authorization;
+    let isOwnerOrAdmin = false;
+    
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.substring(7);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret123');
+        const user = await User.findById(decoded.id);
+        
+        if (user && (user.role === 'admin' || motorcycle.seller._id.toString() === user._id.toString())) {
+          isOwnerOrAdmin = true;
+        }
+      } catch (tokenError) {
+        // Token inválido, continuar como usuario no autenticado
+      }
+    }
+
+    // Si no es el propietario/admin y el producto no está aprobado, no mostrarlo
+    if (!isOwnerOrAdmin && motorcycle.status !== 'approved') {
+      return res.status(404).json({ message: 'Producto no encontrado' });
+    }
+
+    res.json(motorcycle);
+  } catch (error) {
+    console.error('Error al obtener producto:', error);
+    res.status(500).json({ message: 'Error del servidor', error: error.message });
+  }
+});
+
 // @desc    Obtener una moto por ID
 // @route   GET /api/products/:id
 // @access  Public (con autenticación opcional)
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Validar que el ID sea válido para MongoDB
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ message: 'ID de producto no válido' });
+    }
 
+    const motorcycle = await Motorcycle.findById(id)
+      .populate('seller', 'name email')
+      .populate('reviews.user', 'name');
+    
+    if (!motorcycle) {
+      return res.status(404).json({ message: 'Producto no encontrado' });
+    }
+
+    // Solo mostrar productos aprobados a usuarios no autenticados
+    // Los vendedores y admins pueden ver sus propios productos
+    const authHeader = req.headers.authorization;
+    let isOwnerOrAdmin = false;
+    
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.substring(7);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret123');
+        const user = await User.findById(decoded.id);
+        
+        if (user && (user.role === 'admin' || motorcycle.seller._id.toString() === user._id.toString())) {
+          isOwnerOrAdmin = true;
+        }
+      } catch (tokenError) {
+        // Token inválido, continuar como usuario no autenticado
+      }
+    }
+
+    // Si no es el propietario/admin y el producto no está aprobado, no mostrarlo
+    if (!isOwnerOrAdmin && motorcycle.status !== 'approved') {
+      return res.status(404).json({ message: 'Producto no encontrado' });
+    }
+
+    res.json(motorcycle);
+  } catch (error) {
+    console.error('Error al obtener producto:', error);
+    res.status(500).json({ message: 'Error del servidor', error: error.message });
+  }
+});
 
 // @desc    Crear una reseña
 // @route   POST /api/products/:id/reviews

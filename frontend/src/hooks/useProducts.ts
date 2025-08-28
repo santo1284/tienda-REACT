@@ -47,13 +47,16 @@ export const useProducts = () => {
           cc: motorcycle.cc,
           condition: motorcycle.condition,
           mileage: motorcycle.mileage,
+          km: motorcycle.mileage?.toString() || '0', // Convertir mileage a string para km
           location: motorcycle.location,
           description: motorcycle.description,
           images: motorcycle.images,
           seller: motorcycle.seller,
           rating: motorcycle.rating || 0,
           numReviews: motorcycle.numReviews || 0,
-          status: motorcycle.status
+          status: motorcycle.status,
+          // NUEVO: Mapear availability con fallback
+          availability: motorcycle.availability || 'available'
         }));
         
         setProducts(mappedProducts);
@@ -96,7 +99,7 @@ export const useProducts = () => {
   }, []);
 
   // Retornar estados y funciones
-  return { 
+  return {
     products,           // Lista de productos
     loading,           // Si está cargando
     error,             // Si hay error

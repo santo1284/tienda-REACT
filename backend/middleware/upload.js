@@ -47,7 +47,7 @@ const uploadImage = (req, res, next) => {
         let stream = cloudinary.uploader.upload_stream(
           {
             folder: 'mi-moto-del-pueblo',
-            public_id: `${file.fieldname}-${Date.now()}`
+            public_id: `${req.file.fieldname}-${Date.now()}` // ✅ Corregido: usar req.file.fieldname
           },
           (error, result) => {
             if (result) {

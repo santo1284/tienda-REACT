@@ -18,6 +18,7 @@ import RegisterPage from './pages/RegisterPage';
 import ServiciosPage from './pages/ServiciosPage'; // Importar ServiciosPage
 import TallerPage from './pages/TallerPage'; // Importar TallerPage
 import AlquilerPage from './pages/AlquilerPage'; // Importar AlquilerPage
+
 import ProposeSalePage from './pages/ProposeSalePage';
 import PrivateRoute from './components/routing/PrivateRoute';
 import AdminDashboard from './pages/AdminDashboard';
