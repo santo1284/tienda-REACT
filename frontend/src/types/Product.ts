@@ -4,8 +4,10 @@ export interface Product {
   id: number;
   name: string;
   price: number;
+  pricePerHour?: number;
   image: string; // Siempre requerido, con fallback en el hook
   category: string;
+  
   
   // Campos opcionales adicionales
   brand?: string;
@@ -16,6 +18,7 @@ export interface Product {
   mileage?: number;
   location?: string;
   description?: string;
+  contactNumber?: string;
   
   // Campos de imágenes adicionales
   images?: { url: string; public_id: string }[];
